@@ -1,0 +1,5 @@
+h2 Updating products
+= link_to "Back", products_path
+
+= cable_ready_stream_from 'import:update_products'
+.updater_progress

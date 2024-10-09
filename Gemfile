@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "woocommerce_api", "~> 1.4"
+gem "woocommerce_api", github: 'stevereinke/wc-api-ruby'
 gem 'hashdiff'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -34,6 +34,12 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Templating
+gem "slim"
+
+# CSV support
+gem "csv"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -58,3 +64,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "activejob-status", "~> 1.0"
+
+gem "cable_ready", "~> 5.0"

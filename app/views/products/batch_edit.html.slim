@@ -1,0 +1,6 @@
+h2 Upload Products
+
+= form_with url: batch_update_products_path, method: :post, multipart: true, accept: "text/csv" do |f|
+  = f.file_field :product_list
+  = f.submit "Upload"
+

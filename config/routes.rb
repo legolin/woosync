@@ -10,5 +10,14 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "products#index"
+  resources :products do
+    collection do
+      get 'batch_edit'
+      get 'batch_delete'
+      post 'batch_update'
+      get 'batch_update_progress'
+      post 'do_batch_delete'
+    end
+  end
 end
