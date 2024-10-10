@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-gem "woocommerce_api", github: 'stevereinke/wc-api-ruby'
-gem 'hashdiff'
+gem "woocommerce_api", github: "stevereinke/wc-api-ruby"
+gem "hashdiff"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.1"

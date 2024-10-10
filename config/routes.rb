@@ -13,11 +13,11 @@ Rails.application.routes.draw do
   root "products#index"
   resources :products do
     collection do
-      get 'batch_edit'
-      get 'batch_delete'
-      post 'batch_update'
-      get 'batch_update_progress'
-      post 'do_batch_delete'
+      get "batch_edit"
+      get "batch_delete"
+      post "batch_update"
+      get "batch_update_progress"
+      post "do_batch_delete"
     end
   end
 end
