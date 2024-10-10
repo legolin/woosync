@@ -8,5 +8,9 @@ services:
     envVars:
       - key: RAILS_MASTER_KEY
         sync: false
+      - key: BASIC_USERNAME
+        sync: false
+      - key: BASIC_PWD
+        sync: false
       - key: WEB_CONCURRENCY
         value: 2 # sensible default
