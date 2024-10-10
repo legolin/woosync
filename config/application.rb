@@ -1,14 +1,14 @@
 require_relative "boot"
 
 require "rails"
-%w(
+%w[
   action_controller/railtie
   action_view/railtie
   active_job/railtie
   action_cable/engine
   action_text/engine
   rails/test_unit/railtie
-).each do |railtie|
+].each do |railtie|
   begin # rubocop:disable Style/RedundantBegin
     require railtie
   rescue LoadError
