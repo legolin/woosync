@@ -4,7 +4,7 @@ gem "woocommerce_api", github: "stevereinke/wc-api-ruby"
 gem "hashdiff"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.1"
+gem "rails", "8.0.0.beta1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
@@ -20,7 +20,10 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
-# gem "redis", ">= 4.0.1"
+gem "redis", ">= 4.0.1"
+
+# Use Thruster for SSL/reverse proxying in production
+gem "thruster"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -68,3 +71,7 @@ end
 gem "activejob-status", "~> 1.0"
 
 gem "cable_ready", "~> 5.0"
+
+gem "foreman", "~> 0.88.1"
+
+gem "sidekiq", "~> 7.3"

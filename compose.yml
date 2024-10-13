@@ -1,0 +1,22 @@
+services:
+  app: &app_base
+    build: .
+    environment:
+      - RAILS_MASTER_KEY
+      - BASIC_USERNAME
+      - BASIC_PWD
+      - REDIS_URL=redis://redis
+    ports:
+      - "8081:80"
+    volumes:
+      - tmp_uploads:/rails/tmp/uploads:z
+  worker:
+    <<: *app_base
+    command: bundle exec sidekiq
+    ports: []
+    depends_on:
+      - app
+  redis:
+    image: redis:7
+volumes:
+  tmp_uploads:
