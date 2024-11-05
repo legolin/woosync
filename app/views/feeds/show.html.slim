@@ -1,0 +1,12 @@
+h2 View Feed
+
+table
+  thead
+  tbody
+    - @feed.mappings.each do |mapping|
+      tr
+        td = mapping.input_field
+        td = mapping.output_field
+        td = mapping.sample_data
+
+= link_to "Edit Feed", edit_feed_path(@feed)

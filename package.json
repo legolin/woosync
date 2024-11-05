@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "cable_ready": "^5.0.5"
+    "cable_ready": "^5.0.5",
+    "stimulus-rails-nested-form": "^4.1.0"
   }
 }

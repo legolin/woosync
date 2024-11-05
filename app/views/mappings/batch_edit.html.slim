@@ -1,0 +1,23 @@
+= simple_form_for(@feed, local: true, data: { controller: "nested-form", nested_form_wrapper_selector_value: '.nested-fields' }) do |form|
+  - if @feed.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
+      ul
+        - @feed.errors.full_messages.each do |message|
+          li = message
+
+  table
+    thead
+      tr
+        th CSV Field
+        th Product Field
+        th
+    tbody
+      = form.fields_for :mappings, wrapper: false do |mapping_form|
+        tr
+          td
+            = mapping_form.object.input_field
+            = mapping_form.input :input_field, as: :hidden
+          td
+            = mapping_form.input :output_field, collection: Mapping::OUTPUT_FIELDS, selected: (mapping_form.object.output_field || nil), label: false
+  = form.submit

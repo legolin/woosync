@@ -9,8 +9,6 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  root "products#index"
   resources :products do
     collection do
       get "batch_edit"
@@ -20,4 +18,20 @@ Rails.application.routes.draw do
       post "do_batch_delete"
     end
   end
+
+  resources :feeds do
+    resources :mappings do
+      collection do
+        post :from_file
+        get :batch_edit
+        patch :batch_update
+      end
+    end
+  end
+
+  resources :imports
+  resources :suppliers
+
+  # Defines the root path route ("/")
+  root "products#index"
 end

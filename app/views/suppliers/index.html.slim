@@ -1,0 +1,18 @@
+h2 Suppliers
+
+p = link_to "New Supplier", new_supplier_path
+
+table.table
+  thead
+    tr
+      th Name
+      th Update Products
+      th Delete Products
+      th
+  tbody
+    - @suppliers.each do |supplier|
+      tr
+        td = supplier.name
+        td
+        td
+        td

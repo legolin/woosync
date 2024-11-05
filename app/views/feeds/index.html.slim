@@ -1,0 +1,21 @@
+h2 List of Feeds
+
+=link_to "New Feed", new_feed_path
+
+table.table
+  thead
+    tr
+      th Name
+      th Type
+      th
+  tbody
+    - @feeds.each do |feed|
+      tr
+        td = feed.title
+        td = feed.feed_type
+        td
+          = link_to "Edit Feed", feed_path(feed)
+          | &nbsp;
+          = link_to "Mappings", batch_edit_feed_mappings_path(feed)
+          | &nbsp;
+          = button_to "Delete", feed_path(feed), method: :destroy

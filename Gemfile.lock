@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/legolin/litestack.git
+  revision: b364ec52eab8b29fb7d637a2953ee0ea1b11c230
+  specs:
+    litestack (0.4.4)
+      erubi (~> 1)
+      oj (~> 3)
+      rack (~> 3)
+      rackup (~> 2)
+      sqlite3 (>= 1.6.0, < 3.0.0)
+      tilt (~> 2)
+
+GIT
   remote: https://github.com/stevereinke/wc-api-ruby.git
   revision: 6b413a63b29318ad3bbb31c3637c0f0b55fa092c
   specs:
@@ -84,6 +96,9 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    acts-as-taggable-on (11.0.0)
+      activerecord (>= 7.0, < 8.0)
+      zeitwerk (>= 2.4, < 3.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
@@ -178,6 +193,10 @@ GEM
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     observer (0.1.2)
+    oj (3.16.6)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
+    ostruct (0.6.0)
     parallel (1.26.3)
     parser (3.3.5.0)
       ast (~> 2.4.1)
@@ -188,7 +207,7 @@ GEM
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.7)
+    rack (3.1.8)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -229,8 +248,6 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis (5.3.0)
-      redis-client (>= 0.22.0)
     redis-client (0.22.2)
       connection_pool
     regexp_parser (2.9.2)
@@ -280,6 +297,9 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    simple_form (5.3.1)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     slim (5.2.1)
       temple (~> 0.10.0)
       tilt (>= 2.1.0)
@@ -334,6 +354,7 @@ PLATFORMS
 
 DEPENDENCIES
   activejob-status (~> 1.0)
+  acts-as-taggable-on
   bootsnap
   brakeman
   cable_ready (~> 5.0)
@@ -344,15 +365,16 @@ DEPENDENCIES
   hashdiff
   importmap-rails
   jbuilder
+  litestack!
   puma (>= 5.0)
   rails (= 8.0.0.beta1)
-  redis (>= 4.0.1)
   rubocop-rails-omakase
   selenium-webdriver
   sidekiq (~> 7.3)
+  simple_form (~> 5.3)
   slim
   sprockets-rails
-  sqlite3 (>= 1.4)
+  sqlite3 (>= 2.1)
   stimulus-rails
   thruster
   turbo-rails

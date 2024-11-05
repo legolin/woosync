@@ -1,0 +1,18 @@
+= simple_form_for(@feed, local: true, data: { controller: "nested-form", nested_form_wrapper_selector_value: '.nested-fields' }) do |f|
+  - if @feed.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
+      ul
+        - @feed.errors.full_messages.each do |message|
+          li = message
+  = f.input :title
+  = f.input :description
+  = f.input :url
+  = f.input :feed_type, collection: [['Update', 'update'], ['Delete', 'delete']]
+  = f.submit
+
+  / template data-nested-form-target="template"
+  /   = form.fields_for :mappings, Feed.new.mappings.build, child_index: 'NEW_RECORD' do |mapping_form|
+  /     = render 'mapping_fields', f: mapping_form
+
+
