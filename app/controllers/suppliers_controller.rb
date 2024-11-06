@@ -11,7 +11,7 @@ class SuppliersController < ApplicationController
   end
 
   def index
-    @suppliers = Supplier.all
+    @suppliers = Supplier.all.includes(:feeds)
   end
 
   def supplier_params

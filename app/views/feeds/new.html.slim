@@ -1,3 +1,8 @@
-h2 New Feed
+h2 Configure the #{params[:feed_type]} upload for #{@supplier.name}
 
-= render 'form'
+p Get started by uploading a sample of the file you will use for this feed.
+= form_with url: from_file_feed_mappings_path(@feed), method: :post, multipart: true, accept: "text/csv", data: { turbo: false } do |f|
+  = f.file_field :file
+  = f.hidden_field :supplier_id, value: @supplier.id
+  = f.hidden_field :feed_type, value: params[:feed_type]
+  = f.submit "Upload"

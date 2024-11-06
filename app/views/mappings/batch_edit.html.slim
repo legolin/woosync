@@ -21,3 +21,5 @@
           td
             = mapping_form.input :output_field, collection: Mapping::OUTPUT_FIELDS, selected: (mapping_form.object.output_field || nil), label: false
   = form.submit
+  | &nbsp;
+  = link_to "Cancel", suppliers_path

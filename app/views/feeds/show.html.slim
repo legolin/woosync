@@ -1,4 +1,4 @@
-h2 View Feed
+h2 #{@feed.supplier.name} "#{@feed.feed_type.humanize}" Settings
 
 table
   thead
@@ -9,4 +9,4 @@ table
         td = mapping.output_field
         td = mapping.sample_data
 
-= link_to "Edit Feed", edit_feed_path(@feed)
+= link_to "Edit Feed", batch_edit_feed_mappings_path(@feed)

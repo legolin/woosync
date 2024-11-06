@@ -1,5 +1,23 @@
-h2 Product Management
+h2 Products
+= link_to "Import", new_import_path(feed_type: 'update')
+table.table
+  thead
+    tr
+      th Supplier
+      th SKU
+      th Title
+      th style="text-align: right;"Price
+      th style="text-align: right;"Quantity
+  tbody
+    - @products.each do |product|
+      tr
+        td = product.supplier.name
+        td = product.sku
+        td = product.title
+        td style="text-align: right;" = product.price
+        td style="text-align: right;" = product.quantity_in_stock
 
-p = link_to "Batch Update Products", batch_edit_products_path
 
-p = link_to "Batch Delete Products", batch_delete_products_path
+== pagy_nav(@pagy)
+
+== pagy_info @pagy

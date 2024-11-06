@@ -2,14 +2,14 @@ class FeedsController < ApplicationController
   before_action :load_feed, only: %i[show edit destroy update]
 
   def new
-    @feed = Feed.new
+    @supplier = Supplier.find(params[:supplier_id])
+    @feed = Feed.where(supplier: @supplier, feed_type: params[:feed_type]).first_or_create
   end
 
   def create
-    @feed = Feed.create(feed_params)
-    return render(:new) unless @feed.persisted?
+    @feed = Feed.create!(supplier_id: params[:supplier_id], feed_type: params[:feed_type])
 
-    redirect_to feed_path(@feed)
+    redirect_to edit_feed_mappings_path(@feed)
   end
 
   def show
@@ -39,7 +39,7 @@ class FeedsController < ApplicationController
   private
 
   def load_feed
-    @feed = Feed.find(params[:id])
+    @feed = Feed.includes(:supplier).find(params[:id])
   end
 
   def feed_params

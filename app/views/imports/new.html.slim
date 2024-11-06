@@ -1,13 +1,6 @@
 h2 Import Products
 
-= simple_form_for :import
-  table.table
-    tbody
-      tr
-        th Feed Name
-        td = @feed.name
-      tr
-        th Feed Type
-        td = h @feed.feed_type
-      tr
-        =
+= simple_form_for :import, url: imports_path do |f|
+  = f.input :feed_id, as: :select, collection: @feeds.map{ [_1.supplier.name, _1.id] }, label: 'Supplier'
+  = f.input :products, as: :file
+  = f.submit

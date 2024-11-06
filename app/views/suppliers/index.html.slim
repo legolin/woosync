@@ -14,5 +14,13 @@ table.table
       tr
         td = supplier.name
         td
+          -if feed = supplier.feeds.find{_1.feed_type == 'update'}
+            = link_to "Settings", batch_edit_feed_mappings_path(feed)
+          - else
+            = link_to "Configure", new_feed_path(supplier_id: supplier.id, feed_type: 'update')
         td
+          -if feed = supplier.feeds.find{_1.feed_type == 'delete'}
+            = link_to "Settings", batch_edit_feed_mappings_path(feed)
+          - else
+            = link_to "Configure", new_feed_path(supplier_id: supplier.id, feed_type: 'delete')
         td

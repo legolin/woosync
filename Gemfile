@@ -79,3 +79,5 @@ gem "litestack", git: "https://github.com/legolin/litestack.git"
 gem 'acts-as-taggable-on'
 
 gem "simple_form", "~> 5.3"
+
+gem "pagy", "~> 9.2"

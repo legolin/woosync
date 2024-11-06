@@ -1,5 +1,4 @@
 class ImportsController < ApplicationController
-  before_action :load_feed, only: %i[new create]
 
   # Render a form that accepts a products CSV
   # and a feed ID.
@@ -8,10 +7,13 @@ class ImportsController < ApplicationController
   # according to the feed mappings.
   #
   def new
+    @feeds = Feed.where(feed_type: params[:feed_type]).includes(:supplier).order(:'suppliers.name')
   end
 
   def create
-    @changes = @feed.import_products(params[:products].tempfile)
+    @feed = Feed.find(params.dig(:import, :feed_id))
+    @changes = @feed.import_products(params.dig(:import, :products).tempfile)
+    redirect_to products_path
   end
 
   private
