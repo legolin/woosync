@@ -1,33 +1,49 @@
 class Feed < ApplicationRecord
   has_many :mappings, dependent: :destroy
-  belongs_to :supplier
+  belongs_to :supplier, optional: true
 
   accepts_nested_attributes_for :mappings, allow_destroy: true, reject_if: :all_blank
 
-  validates :supplier, :feed_type, presence: true
   validates :feed_type, inclusion: { in: %w[update delete] }
+
+  # Display the title if provided, or generate a title from the supplier and action.
+  def display_name
+    return title if title.present?
+    "#{supplier&.name || "Generic"} - #{feed_type.capitalize}"
+  end
 
   def import_products(file)
     changes = []
+    suppliers = Supplier.all.each_with_object({}) { |supplier, hash| hash[supplier.slug.downcase] = supplier }
     csv = CSV.parse(file.read.force_encoding("UTF-8"), headers: true)
     csv.each do |row|
       sku = row['sku'] || row['SKU']
-      product = Product.where(sku: sku, supplier_id: supplier_id).first_or_initialize
+      product = Product.where(sku: sku).first_or_initialize
       mappings.each do |mapping|
-
+        # Skip this mapping if no output field is defined
         next if mapping.output_field.blank?
 
+        # Get the value from the CSV
+        value = row[mapping.input_field]
+
+        # Some output fields have special behaviors.
         case mapping.output_field
-        when 'sku', 'supplier_code', 'return_policy_code'
+        when 'supplier_code'
+          # next if self.supplier_id
+puts suppliers.inspect
+puts value.downcase.inspect
+          product.supplier_id = suppliers[value.downcase].id
+        when 'sku', 'return_policy_code'
           # Noop
         when 'images'
+        when 'tags'
+          product.tag_list = value
         else
-          value = row[mapping.input_field]
           product[mapping.output_field] = value
         end
       end
       changes << product.changes
-      product.save
+      product.save!
     end
     changes
   end

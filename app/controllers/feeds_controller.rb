@@ -1,15 +1,15 @@
 class FeedsController < ApplicationController
   before_action :load_feed, only: %i[show edit destroy update]
+  before_action :set_nav_slug
 
   def new
-    @supplier = Supplier.find(params[:supplier_id])
-    @feed = Feed.where(supplier: @supplier, feed_type: params[:feed_type]).first_or_create
+    @supplier = Supplier.find_by(id: params[:supplier_id])
   end
 
   def create
-    @feed = Feed.create!(supplier_id: params[:supplier_id], feed_type: params[:feed_type])
+    @feed = Feed.create!(feed_params)
 
-    redirect_to edit_feed_mappings_path(@feed)
+    redirect_to batch_edit_feed_mappings_path(@feed)
   end
 
   def show
@@ -43,7 +43,11 @@ class FeedsController < ApplicationController
   end
 
   def feed_params
-    params.require(:feed).permit(:title, :description, :url, :feed_type,
+    params.require(:feed).permit(:title, :description, :url, :feed_type, :supplier_id,
       mappings_attributes: [:id, :input_field, :output_field, :_destroy])
+  end
+
+  def set_nav_slug
+    @nav_slug = :feeds
   end
 end

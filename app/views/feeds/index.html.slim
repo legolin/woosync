@@ -1,21 +1,21 @@
-h2 List of Feeds
+h2 Data Sources
 
-=link_to "New Feed", new_feed_path
+=link_to "New Data Source", new_feed_path
 
 table.table
   thead
     tr
-      th Name
-      th Type
+      th Supplier
+      th Import Type
       th
   tbody
     - @feeds.each do |feed|
       tr
-        td = feed.title
-        td = feed.feed_type
+        td = feed.supplier ? feed.supplier.name : 'Generic'
+        td = feed.feed_type.humanize
         td
           = link_to "Edit Feed", feed_path(feed)
           | &nbsp;
           = link_to "Mappings", batch_edit_feed_mappings_path(feed)
           | &nbsp;
-          = button_to "Delete", feed_path(feed), method: :destroy
+          = button_to "Delete", feed_path(feed), method: :delete

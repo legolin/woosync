@@ -5,11 +5,11 @@ class MappingsController < ApplicationController
   # and use them to build out a list of mappings.  Each mapping also gets the value
   # from that row for preview purposes.
   def from_file
-    unless params[:file].present?
+    unless params.dig(:feed, :file).present?
       redirect_to feed_path(@feed), alert: 'Please select a file'
     end
 
-    parsed_csv = CSV.parse(params[:file].read, headers: true)
+    parsed_csv = CSV.parse(params.dig(:feed, :file).read.force_encoding('UTF-8'), headers: true)
 
     row = parsed_csv.first
     row.each do |key, value|

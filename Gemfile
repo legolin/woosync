@@ -6,8 +6,6 @@ gem "hashdiff"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "8.0.0.beta1"
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -81,3 +79,14 @@ gem 'acts-as-taggable-on'
 gem "simple_form", "~> 5.3"
 
 gem "pagy", "~> 9.2"
+
+gem "cssbundling-rails", "~> 1.4"
+
+gem "propshaft"
+
+gem "jsbundling-rails", "~> 1.3"
+
+gem 'state_machines'
+gem 'state_machines-activerecord'
+
+gem "dentaku", "~> 3.5"

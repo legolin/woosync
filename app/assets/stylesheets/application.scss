@@ -1,0 +1,62 @@
+@use 'bootstrap/scss/bootstrap';
+@use 'bootstrap-icons/font/bootstrap-icons';
+
+.container-fluid {
+  --bs-gutter-x: 0
+}
+
+#main_content {
+  padding-right: 20px;
+}
+
+// The simple_from CSS uses floats, and the first radio button wants to float to the right.
+.form-check {
+  clear: both;
+}
+.updater_progress {
+  border: 1px solid #eeeeee;
+  padding: 10px;
+  background: black;
+  color: white;
+  font-family: 'Courier New', Courier, monospace
+}
+
+form .buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.menu {
+  width: 320px;
+  background: #333;
+  color: white;
+}
+
+#edit_pane {
+  width: 500px;
+  padding: 0 20px;
+}
+
+.status_circle {
+  height: 12px;
+  width: 12px;
+  border-radius: 8px;
+  display: inline-block;
+
+  &.green {
+    background-color: rgb(0,200,100);
+  }
+
+  &.red {
+    background-color: rgb(230,50,0);
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.gray {
+  color: #BBB;
+}

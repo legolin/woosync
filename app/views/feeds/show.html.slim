@@ -1,12 +1,16 @@
-h2 #{@feed.supplier.name} "#{@feed.feed_type.humanize}" Settings
+h2 #{@feed.supplier&.name || 'Generic'} "#{@feed.feed_type.humanize}" Settings
 
-table
+table.table.table-bordered.table-striped
   thead
   tbody
     - @feed.mappings.each do |mapping|
       tr
         td = mapping.input_field
-        td = mapping.output_field
+        td
+          - if mapping.output_field.present?
+            = mapping.output_field
+          - else
+            span.gray Not Imported
         td = mapping.sample_data
 
 = link_to "Edit Feed", batch_edit_feed_mappings_path(@feed)

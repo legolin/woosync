@@ -1,8 +1,8 @@
-h2 Configure the #{params[:feed_type]} upload for #{@supplier.name}
+h2 New Data Source
 
-p Get started by uploading a sample of the file you will use for this feed.
-= form_with url: from_file_feed_mappings_path(@feed), method: :post, multipart: true, accept: "text/csv", data: { turbo: false } do |f|
-  = f.file_field :file
-  = f.hidden_field :supplier_id, value: @supplier.id
-  = f.hidden_field :feed_type, value: params[:feed_type]
-  = f.submit "Upload"
+p Get started by choosing an import type and an optional supplier:
+= simple_form_for :feed, url: feeds_path do |f|
+  = f.input :feed_type, label: 'Data Source Type', as: :radio_buttons, collection: {'Update Products' => 'update', 'Delete Products' => 'delete'}
+  = f.input :supplier_id, collection: suppliers_for_feed
+  = f.input :description, hint: 'Example: "Import ACME products from supplier CSV"'
+  = f.submit 'Next: Configure Import'

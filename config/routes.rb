@@ -29,7 +29,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :imports
+  resources :imports do
+    collection do
+      get :choose_upload, as: :choose_import_file
+    end
+  end
   resources :suppliers
 
   # Defines the root path route ("/")

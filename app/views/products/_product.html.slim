@@ -1,0 +1,16 @@
+tr id=dom_id(product)
+  td
+    = link_to((product.sku ? product.sku : '[No SKU]'), product_path(product), method: :get, data: { turbo: true, turbo_frame: 'sidebar'})
+    / = button_to((product.sku ? product.sku : '[No SKU]'), product_path(product), method: :get, form: { data: { turbo: true, turbo_frame: 'sidebar'}})
+  td = product.state.humanize
+  td = product.availability
+  td
+    .d-flex.align-items-center style="height: 1.3em;"
+      - if product.needs_sync
+        div.status_circle.red &nbsp;
+      - else
+        div.status_circle.green &nbsp;
+  td = product.supplier.name
+  td = product.title
+  td style="text-align: right;" = product.listing_price ? "%.2f" % product.listing_price : 'N/A'
+  td style="text-align: right;" = product.quantity_in_stock

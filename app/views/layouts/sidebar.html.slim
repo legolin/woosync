@@ -1,0 +1,6 @@
+turbo-frame#sidebar data-controller="sidebar"
+  #edit_pane.flex-grow-1
+    .sidebar_header
+      = link_to "Close", '#', data: { action: "click->sidebar#close" }
+    .sidebar_content
+      = yield

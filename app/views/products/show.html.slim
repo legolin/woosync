@@ -1,0 +1,57 @@
+h2 = @product.title
+
+h6 = "[SKU #{ @product.sku }]"
+
+= (@product.description || 'No Description').html_safe
+
+h5 Price
+
+table.table.table-bordered.table-striped
+  tbody
+    tr
+      th style="width: 160px;" Price
+      td = @product.price
+    -if @product.supplier.custom_price?
+      tr
+        th Generated Price
+        td = "%.2f" % @product.generated_price.truncate(2)
+    tr
+      th MSRP
+      td = @product.msrp
+    tr
+      th Shipping Cost
+      td = @product.shipping_cost.truncate(2).to_s('F')
+    tr
+      th Calculated Profit Margin
+      td = @product.estimated_profit_margin.truncate(1).to_s('F') + "%"
+h5 Details
+
+table.table.table-bordered.table-striped
+  tbody
+    tr
+      th style="width: 160px;" Width
+      td = @product.width
+    tr
+      th Height
+      td = @product.height
+    tr
+      th Length
+      td = @product.length
+    tr
+      th Weight
+      td = @product.weight ? "#{@product.weight} #{@product.weight_unit}" : 'N/A'
+    tr
+      th Tags
+      td = @product.tag_list.join(', ')
+
+h5 Images
+
+
+
+.buttons
+  - if @product.state == 'active'
+    = button_to 'Discontinue', product_path(@product), method: :patch, params: { product: { state_event: 'discontinue' }}, class: 'btn btn-danger'
+  - elsif @product.state == 'discontinued'
+    = button_to 'Reactivate', product_path(@product), method: :patch, params: { product: { state_event: 'reactivate' }}, class: 'btn btn-primary'
+    = button_to 'Archive', product_path(@product), method: :patch, params: { product: { state_event: 'archive' }}, class: 'btn btn-secondary'
+

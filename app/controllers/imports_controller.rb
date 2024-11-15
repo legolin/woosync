@@ -7,7 +7,14 @@ class ImportsController < ApplicationController
   # according to the feed mappings.
   #
   def new
-    @feeds = Feed.where(feed_type: params[:feed_type]).includes(:supplier).order(:'suppliers.name')
+    @update_feeds = Feed.where(feed_type: 'update').includes(:supplier).order(:'suppliers.name')
+    @delete_feeds = Feed.where(feed_type: 'delete').includes(:supplier).order(:'suppliers.name')
+  end
+
+  # Render a CSV upload area that the user can use to kick off a product import.
+  #
+  def choose_upload
+    @feed = Feed.find(params[:feed_id])
   end
 
   def create

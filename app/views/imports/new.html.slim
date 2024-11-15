@@ -1,6 +1,21 @@
-h2 Import Products
+h2 Start a new Import
 
-= simple_form_for :import, url: imports_path do |f|
-  = f.input :feed_id, as: :select, collection: @feeds.map{ [_1.supplier.name, _1.id] }, label: 'Supplier'
-  = f.input :products, as: :file
-  = f.submit
+h3.mb-4 Add/Update Products
+
+.d-flex.flex-nowrap.gap-3.mb-4
+  - @update_feeds.each do |feed|
+    .card style="width: 18em;"
+      .card-body.d-flex.flex-column.justify-content-between
+        h5.card-title = feed.display_name
+        p.card-text = feed.description
+        = link_to "Continue...", choose_import_file_imports_path(feed_id: feed.id), class: 'btn btn-primary'
+
+h3.mb-4 Discontinue Products
+
+.d-flex.flex-nowrap.gap-3.mb-4
+  - @delete_feeds.each do |feed|
+    .card style="width: 18em;"
+      .card-body.d-flex.flex-column.justify-content-between
+        h5.card-title = feed.display_name
+        p.card-text = feed.description
+        = link_to "Continue...", choose_import_file_imports_path(feed_id: feed.id), class: 'btn btn-primary'

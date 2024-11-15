@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_05_183726) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_15_030059) do
   create_table "feeds", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -19,6 +19,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_05_183726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "supplier_id"
+    t.boolean "on_update_update_existing_entries", default: true
+    t.boolean "on_update_undelete_deleted_entries", default: false
     t.index ["supplier_id"], name: "index_feeds_on_supplier_id"
   end
 
@@ -73,13 +75,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_05_183726) do
 
   create_table "products", force: :cascade do |t|
     t.integer "supplier_id", null: false
-    t.string "sku"
-    t.string "title"
-    t.string "custom_title"
-    t.text "description"
-    t.text "custom_description"
+    t.string "sku", null: false
+    t.string "title", default: ""
+    t.string "custom_title", default: ""
+    t.string "description", default: ""
+    t.string "custom_description", default: ""
     t.decimal "price", precision: 10, scale: 2
-    t.integer "quantity_in_stock"
+    t.integer "quantity_in_stock", default: 0, null: false
     t.decimal "shipping_cost", precision: 10, scale: 2
     t.decimal "height", precision: 10, scale: 2
     t.decimal "width", precision: 10, scale: 2
@@ -93,7 +95,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_05_183726) do
     t.integer "return_policy_code_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "state", default: "active"
+    t.boolean "needs_sync", default: true
+    t.datetime "last_synced_at"
+    t.decimal "custom_price", precision: 10, scale: 2
+    t.decimal "msrp", precision: 10, scale: 2
     t.index ["return_policy_code_id"], name: "index_products_on_return_policy_code_id"
+    t.index ["sku"], name: "index_products_on_sku", unique: true
     t.index ["supplier_id"], name: "index_products_on_supplier_id"
   end
 
@@ -106,6 +114,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_05_183726) do
 
   create_table "suppliers", force: :cascade do |t|
     t.string "name"
+    t.string "slug", default: "", null: false
+    t.json "default_values", default: {}, null: false
+    t.json "status_rules", default: {}, null: false
+    t.text "price_calculation_rule"
   end
 
   create_table "taggings", force: :cascade do |t|

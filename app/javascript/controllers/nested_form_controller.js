@@ -1,3 +1,3 @@
-import NestedForm from "@stimulus-components/rails-nested-form"
+import NestedForm from "stimulus-rails-nested-form"
 
-export default class extends NestedForm { }
+export default NestedForm; //class extends NestedForm { }

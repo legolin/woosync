@@ -1,0 +1,6 @@
+class AddCustomPriceAndMsrpColumns < ActiveRecord::Migration[8.0]
+  def change
+    add_column :products, :custom_price, :decimal, precision: 10, scale: 2
+    add_column :products, :msrp, :decimal, precision: 10, scale: 2
+  end
+end

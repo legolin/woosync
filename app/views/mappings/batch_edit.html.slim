@@ -1,3 +1,6 @@
+h2 Edit Mappings
+
+p Choose which column in the CSV should map to which columns in the products table.  You can import as few or many columns as you wish.
 = simple_form_for(@feed, local: true, data: { controller: "nested-form", nested_form_wrapper_selector_value: '.nested-fields' }) do |form|
   - if @feed.errors.any?
     #error_explanation
@@ -19,7 +22,14 @@
             = mapping_form.object.input_field
             = mapping_form.input :input_field, as: :hidden
           td
-            = mapping_form.input :output_field, collection: Mapping::OUTPUT_FIELDS, selected: (mapping_form.object.output_field || nil), label: false
+            - if mapping_form.object.input_field.downcase == 'supplier'
+              input.form-control type="text" value="Supplier" disabled="disabled"
+              = mapping_form.hidden_field :output_field, value: 'supplier_code'
+            - elsif mapping_form.object.input_field.downcase == 'sku'
+              input.form-control type="text" value="SKU" disabled="disabled"
+              = mapping_form.hidden_field :output_field, value: 'sku'
+            - else
+              = mapping_form.input :output_field, collection: Mapping::OUTPUT_FIELDS, selected: (mapping_form.object.output_field || best_match(mapping_form.object)), label: false
   = form.submit
   | &nbsp;
   = link_to "Cancel", suppliers_path

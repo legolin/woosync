@@ -1,6 +1,8 @@
 class Mapping < ApplicationRecord
   belongs_to :feed
 
+  validates :input_field, presence: true
+
   OUTPUT_FIELDS = {
     'Ignore this column' => nil,
     'Supplier' => :supplier_code,
@@ -12,6 +14,7 @@ class Mapping < ApplicationRecord
     'Length' => :length,
     'Weight' => :weight,
     'Price' => :price,
+    'MSRP' => :msrp,
     'Shipping Cost' => :shipping_cost,
     'Category 1' => :category1,
     'Category 2' => :category2,

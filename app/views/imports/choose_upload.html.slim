@@ -1,0 +1,14 @@
+h2 Start a new Import
+
+h6 = @feed.display_name
+p = @feed.description
+
+h6 Import Type:
+p = @feed.feed_type.humanize
+
+h6 Supplier:
+p = @feed.supplier&.name || "Generic - Specified by CSV column"
+= simple_form_for :import, url: imports_path, method: :post, multipart: true do |f|
+  = f.hidden_field :feed_id, value: @feed.id
+  = f.input :products, as: :file
+  = f.submit "Start Import", class: 'btn btn-primary'

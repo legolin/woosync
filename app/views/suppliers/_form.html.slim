@@ -1,0 +1,11 @@
+= simple_form_for @supplier do |f|
+  = f.error_notification
+  - if f.object.errors[:base].present?
+    = f.error_notification message: f.object.errors[:base].to_sentence
+
+  = f.input :name
+  = f.input :slug, label: 'Identifier for Imports', hint: 'This is the value that we look for when importing a product from a generic data source that is not tied to specific supplier.'
+  = f.input :price_calculation_rule, hint: "Variables: price, msrp, shipping_cost.  Functions: ROUNDDOWN, ROUNDUP Example: ROUNDDOWN(price * 0.4) + shipping_cost"
+  .buttons
+    = f.submit
+    = link_to "Cancel", suppliers_path
