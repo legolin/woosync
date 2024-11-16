@@ -1,4 +1,5 @@
 class ImportsController < ApplicationController
+  before_action :set_nav_slug
 
   # Render a form that accepts a products CSV
   # and a feed ID.
@@ -27,5 +28,9 @@ class ImportsController < ApplicationController
 
   def load_feed
     @feed = Feed.find(params[:feed_id])
+  end
+
+  def set_nav_slug
+    @nav_slug = :imports
   end
 end

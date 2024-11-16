@@ -3,9 +3,13 @@ h2 Products
 turbo-frame#products-list
   .filters.flex.justify-end.mb-1
     = form_with method: :get do |form|
-      .input-group.mb-3
-        = form.text_field :filter, placeholder: "Search", value: params[:filter], class: "form-control", 'htmlaria-describedby': "search-button"
-        = form.button "Search", class: "btn btn-outline-secondary", id:"search-button"
+      .row.g-3.flex-nowrap
+        .col-auto
+          = form.select :supplier_id, options_for_select(suppliers_for_products_filter, params[:supplier_id]), {}, { class: 'form-select', onchange: 'this.form.submit();' }
+        .col-auto.flex-fill
+          .input-group
+            = form.text_field :filter, placeholder: "Search", value: params[:filter], class: "form-control", 'htmlaria-describedby': "search-button"
+            = form.button "Search", class: "btn btn-outline-secondary", id:"search-button"
 
   table.table
     thead

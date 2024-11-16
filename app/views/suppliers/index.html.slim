@@ -6,12 +6,12 @@ table.table
   thead
     tr
       th Name
-      th
+      th Products
       th
   tbody
     - @suppliers.each do |supplier|
       tr
         td = supplier.name
+        td = link_to supplier.products.count, products_path(supplier_id: supplier.id)
         td
-        td
-          = link_to "Edit", edit_supplier_path(supplier)
+          = link_to "Edit", edit_supplier_path(supplier), class: 'btn btn-primary'

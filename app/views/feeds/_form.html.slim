@@ -5,11 +5,15 @@
       ul
         - @feed.errors.full_messages.each do |message|
           li = message
-  = f.input :title
-  = f.input :description
-  = f.input :url
+  = f.input :supplier, collection: Supplier.all, label_method: :name, include_blank: 'Generic - Specified by column in CSV'
+  = f.input :title, required: false, hint: 'Optional'
+  = f.input :description, required: false, hint: 'Optional'
+  = f.input :url, required: false
   = f.input :feed_type, collection: [['Update', 'update'], ['Delete', 'delete']]
-  = f.submit
+
+  .d-flex
+    = f.submit class: 'btn btn-primary mx-1'
+    = link_to "Cancel", feeds_path, class: 'btn btn-secondary'
 
   / template data-nested-form-target="template"
   /   = form.fields_for :mappings, Feed.new.mappings.build, child_index: 'NEW_RECORD' do |mapping_form|

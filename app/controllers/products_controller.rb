@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
 
   def index
     product_scope = Product.all.includes(:supplier)
+    product_scope = product_scope.where(supplier_id: params[:supplier_id]) if params[:supplier_id].present?
     product_scope = product_scope.where("sku = :filter OR title like :infilter or description like :infilter or custom_title like :infilter or custom_description like :infilter", filter: params[:filter], infilter: "%#{params[:filter]}%") if params[:filter].present?
     @pagy, @products = pagy(product_scope)
   end
