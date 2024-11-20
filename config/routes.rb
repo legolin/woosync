@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     end
   end
   resources :suppliers
+  resources :exports
 
   # Defines the root path route ("/")
   root "products#index"

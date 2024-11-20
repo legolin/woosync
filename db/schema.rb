@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_15_030059) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_19_155139) do
   create_table "feeds", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_15_030059) do
     t.integer "supplier_id"
     t.boolean "on_update_update_existing_entries", default: true
     t.boolean "on_update_undelete_deleted_entries", default: false
+    t.json "parsed_data_rows"
     t.index ["supplier_id"], name: "index_feeds_on_supplier_id"
   end
 
@@ -70,6 +71,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_15_030059) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "sample_data", default: ""
+    t.boolean "enabled", default: false
+    t.boolean "simple", default: true
     t.index ["feed_id"], name: "index_mappings_on_feed_id"
   end
 

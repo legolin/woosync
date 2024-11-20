@@ -9,27 +9,24 @@ p Choose which column in the CSV should map to which columns in the products tab
         - @feed.errors.full_messages.each do |message|
           li = message
 
-  table
+  table.table.table-bordered.table-striped
     thead
       tr
-        th CSV Field
         th Product Field
+        th Source Fields
         th
     tbody
       = form.fields_for :mappings, wrapper: false do |mapping_form|
-        tr
+        tr.align-top data-controller="mapping-field"
           td
-            = mapping_form.object.input_field
-            = mapping_form.input :input_field, as: :hidden
+            = Mapping::OUTPUT_FIELDS[mapping_form.object.output_field.to_sym]
+            = mapping_form.input :output_field, as: :hidden, input_html: { data: { 'mapping-field-target': 'outputField' } }
           td
-            - if mapping_form.object.input_field.downcase == 'supplier'
-              input.form-control type="text" value="Supplier" disabled="disabled"
-              = mapping_form.hidden_field :output_field, value: 'supplier_code'
-            - elsif mapping_form.object.input_field.downcase == 'sku'
-              input.form-control type="text" value="SKU" disabled="disabled"
-              = mapping_form.hidden_field :output_field, value: 'sku'
-            - else
-              = mapping_form.input :output_field, collection: Mapping::OUTPUT_FIELDS, selected: (mapping_form.object.output_field || best_match(mapping_form.object)), label: false
+            span.message data-mapping-field-target="message"
+            = mapping_form.input :enabled, as: :boolean, label: 'Import this field', input_html: { data: { 'mapping-field-target': 'checkbox', action: "click->mapping-field#clickCheckbox" }}
+            = mapping_form.collection_radio_buttons :simple, [[true, 'Single Source Column'], [false, 'Multiple Sources']], :first, :last
+            = mapping_form.input :input_field, collection: @feed.parsed_data_rows.first.keys, selected: (mapping_form.object.input_field || best_match(mapping_form.object)), label: false, include_blank: 'Select a CSV column',  input_html: { data: { 'mapping-field-target': 'inputField' } }
+
   = form.submit
   | &nbsp;
   = link_to "Cancel", suppliers_path

@@ -9,6 +9,13 @@
   padding-right: 20px;
 }
 
+#sidebar {
+  overflow-y: auto;
+  &> div {
+    max-width: 500px;
+  }
+}
+
 // The simple_from CSS uses floats, and the first radio button wants to float to the right.
 .form-check {
   clear: both;
@@ -26,14 +33,7 @@ form .buttons {
   gap: 10px;
 }
 
-.menu {
-  width: 320px;
-  background: #333;
-  color: white;
-}
-
 #edit_pane {
-  width: 500px;
   padding: 0 20px;
 }
 
@@ -59,4 +59,16 @@ form .buttons {
 
 .gray {
   color: #BBB;
+}
+
+.heading {
+  height: 80px;
+  padding-top: 10px;
+  position: relative;
+
+  .menu {
+    position: absolute;
+    top: 10px;
+    right: 0;
+  }
 }

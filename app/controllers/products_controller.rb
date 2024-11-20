@@ -10,7 +10,19 @@ class ProductsController < ApplicationController
     product_scope = Product.all.includes(:supplier)
     product_scope = product_scope.where(supplier_id: params[:supplier_id]) if params[:supplier_id].present?
     product_scope = product_scope.where("sku = :filter OR title like :infilter or description like :infilter or custom_title like :infilter or custom_description like :infilter", filter: params[:filter], infilter: "%#{params[:filter]}%") if params[:filter].present?
-    @pagy, @products = pagy(product_scope)
+
+    respond_to do |with|
+      with.html do
+        @pagy, @products = pagy(product_scope)
+      end
+      with.csv do
+        respond_to do |with|
+          csv_string = ExportGenerator.new.generate(product_scope)
+          filename = "products-export-#{Date.today.strftime("%Y%m%d")}.csv"
+          with.csv { send_data csv_string, filename: filename, content_type: 'text/csv', disposition: 'attachment' }
+        end
+      end
+    end
   end
 
   def show

@@ -1,6 +1,7 @@
-h2 Products
-
 turbo-frame#products-list
+  .heading
+    h2 Products
+
   .filters.flex.justify-end.mb-1
     = form_with method: :get do |form|
       .row.g-3.flex-nowrap
@@ -11,6 +12,9 @@ turbo-frame#products-list
             = form.text_field :filter, placeholder: "Search", value: params[:filter], class: "form-control", 'htmlaria-describedby': "search-button"
             = form.button "Search", class: "btn btn-outline-secondary", id:"search-button"
 
+  .d-flex.justify-content-between.mt-3.mb-2.align-items-center
+    span == pagy_info @pagy
+    = link_to "Download as CSV", url_for(request.params.merge(format: :csv)), class: 'btn btn-secondary'
   table.table
     thead
       tr
@@ -27,6 +31,6 @@ turbo-frame#products-list
         = render 'product', product: product
 
 
-  == pagy_bootstrap_nav(@pagy)
-
-  == pagy_info @pagy
+  .d-flex.flex-column.align-items-center.mt-4.mb-4
+    == pagy_bootstrap_nav(@pagy)
+    == pagy_info @pagy

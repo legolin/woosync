@@ -30,8 +30,6 @@ class Feed < ApplicationRecord
         case mapping.output_field
         when 'supplier_code'
           # next if self.supplier_id
-puts suppliers.inspect
-puts value.downcase.inspect
           product.supplier_id = suppliers[value.downcase].id
         when 'sku', 'return_policy_code'
           # Noop
@@ -46,5 +44,19 @@ puts value.downcase.inspect
       product.save!
     end
     changes
+  end
+
+  def create_mappings_from_headers
+    headers = parsed_data_rows.first.keys.map(&:to_s).map(&:downcase)
+    output_fields = if supplier
+      Mapping::OUTPUT_FIELDS.except(:supplier_code)
+    else
+      Mapping::OUTPUT_FIELDS
+    end
+    mappings.destroy_all
+    output_fields.each do |key, field_name|
+      best_guess = headers.find{ _1.parameterize == key.to_s }
+      mappings.create(input_field: nil, output_field: key, enabled: false)
+    end
   end
 end

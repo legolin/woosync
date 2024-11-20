@@ -11,16 +11,17 @@ class MappingsController < ApplicationController
 
     parsed_csv = CSV.parse(params.dig(:feed, :file).read.force_encoding('UTF-8'), headers: true)
 
-    row = parsed_csv.first
-    row.each do |key, value|
-      @feed.mappings.build(input_field: key, output_field: nil, sample_data: value)
-    end
+    @feed.update(parsed_data_rows: parsed_csv[0..100].sample(5).map(&:to_h))
+
+    @feed.create_mappings_from_headers
 
     render :batch_edit
   end
 
   def batch_edit
-    render :upload_file if @feed.mappings.empty?
+    @feed.create_mappings_from_headers unless @feed.mappings.any?
+
+    render :upload_file if @feed.parsed_data_rows.nil?
   end
 
   def batch_update

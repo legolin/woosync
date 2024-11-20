@@ -11,3 +11,6 @@ application.register("nested-form", NestedFormController)
 
 import SidebarController from "./sidebar_controller";
 application.register("sidebar", SidebarController)
+
+import MappingFieldController from "./mapping_field_controller";
+application.register("mapping-field", MappingFieldController)
