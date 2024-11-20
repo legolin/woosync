@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_19_155139) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
   create_table "feeds", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -72,7 +72,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_19_155139) do
     t.datetime "updated_at", null: false
     t.text "sample_data", default: ""
     t.boolean "enabled", default: false
-    t.boolean "simple", default: true
+    t.string "import_method", default: "simple"
+    t.text "import_field"
     t.index ["feed_id"], name: "index_mappings_on_feed_id"
   end
 

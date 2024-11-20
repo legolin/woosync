@@ -54,7 +54,7 @@ class Feed < ApplicationRecord
       Mapping::OUTPUT_FIELDS
     end
     mappings.destroy_all
-    output_fields.each do |key, field_name|
+    output_fields.each do |key, opts|
       best_guess = headers.find{ _1.parameterize == key.to_s }
       mappings.create(input_field: nil, output_field: key, enabled: false)
     end

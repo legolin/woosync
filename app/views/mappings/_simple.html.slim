@@ -1,0 +1,2 @@
+.import_method data-import-method="simple"
+  = mapping_form.input :input_field, collection: feed.parsed_data_rows.first.keys, selected: (mapping_form.object.input_field || best_match(mapping_form.object)), label: false, include_blank: 'Select a CSV column',  input_html: { data: { 'mapping-field-target': 'inputField', action: 'change->mapping-field#updateSampleData' } }

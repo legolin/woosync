@@ -44,7 +44,7 @@ class FeedsController < ApplicationController
 
   def feed_params
     params.require(:feed).permit(:title, :description, :url, :feed_type, :supplier_id,
-      mappings_attributes: [:id, :input_field, :output_field, :_destroy])
+      mappings_attributes: [:id, :input_field, :output_field, :_destroy, :enabled, :import_method, :array_separator])
   end
 
   def set_nav_slug

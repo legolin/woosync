@@ -1,0 +1,3 @@
+.import_method data-import-method="split_string"
+  = mapping_form.input :input_field, collection: feed.parsed_data_rows.first.keys.map(&:to_s), selected: (mapping_form.object.input_field || best_match(mapping_form.object)), label: 'Column Name', include_blank: 'Select a CSV column',  input_html: { data: { 'mapping-field-target': 'inputField', action: 'change->mapping-field#updateSampleData' } }
+  = mapping_form.input :array_separator, label: 'Separator Character', hint: 'Usually comma, but sometimes | or ; might be used to separate values', input_html: { action: 'change->mapping-field#updateSampleData' }
