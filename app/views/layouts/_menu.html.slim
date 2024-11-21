@@ -4,11 +4,11 @@
       | WooSync
   hr
   ul.nav.nav-pills.flex-column.mb-auto
-    = nav_link_item 'Products', products_path, :products
-    = nav_link_item 'Suppliers', suppliers_path, :suppliers
-    = nav_link_item 'Data Sources', feeds_path, :feeds
-    = nav_link_item 'Imports', new_import_path, :imports
-    = nav_link_item 'Exports', exports_path, :exports
+    == nav_link_item 'Products', products_path, :products, :'list-columns-reverse'
+    = nav_link_item 'Suppliers', suppliers_path, :suppliers, :hammer
+    = nav_link_item 'Data Sources', feeds_path, :feeds, :database
+    = nav_link_item 'Imports', new_import_path, :imports, :'cloud-upload'
+    = nav_link_item 'Exports', exports_path, :exports, :download
 
   hr
   .dropdown

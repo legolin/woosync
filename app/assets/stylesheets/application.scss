@@ -1,6 +1,8 @@
 @use 'bootstrap/scss/bootstrap';
 @use 'bootstrap-icons/font/bootstrap-icons';
 @use './forms';
+@use './mapping_editor';
+@use './products';
 
 .container-fluid {
   --bs-gutter-x: 0
@@ -8,6 +10,10 @@
 
 #main_content {
   padding-right: 20px;
+}
+
+a.nav-link i.bi {
+  margin-right: 8px;
 }
 
 #sidebar {
@@ -72,4 +78,8 @@ form .buttons {
     top: 10px;
     right: 0;
   }
+}
+
+.btn i.bi {
+  margin-right: 8px;
 }

@@ -1,38 +1,39 @@
-h2 Edit Mappings
+.mappings.edit
+  h2 Edit Mappings
 
-p Choose which column in the CSV should map to which columns in the products table.  You can import as few or many columns as you wish.
-= simple_form_for(@feed, local: true, data: { controller: "nested-form", nested_form_wrapper_selector_value: '.nested-fields' }) do |form|
-  - if @feed.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
-      ul
-        - @feed.errors.full_messages.each do |message|
-          li = message
+  p Choose which column in the CSV should map to which columns in the products table.  You can import as few or many columns as you wish.
+  = simple_form_for(@feed, local: true, data: { controller: "nested-form", nested_form_wrapper_selector_value: '.nested-fields' }) do |form|
+    - if @feed.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
+        ul
+          - @feed.errors.full_messages.each do |message|
+            li = message
 
-  table.table.table-bordered.table-striped
-    thead
-      tr
-        th Product Field
-        th Source Fields
-        th Sample Values
-    tbody
-      = form.fields_for :mappings, wrapper: false do |mapping_form|
-        tr.align-top data-controller="mapping-field" data-mapping-field-sample-data-value=@feed.parsed_data_rows.to_json
-          td
-            = Mapping::OUTPUT_FIELDS.dig(mapping_form.object.output_field.to_sym, :label)
-            = mapping_form.input :output_field, as: :hidden, input_html: { data: { 'mapping-field-target': 'outputField' } }
-          td
-            span.message data-mapping-field-target="message"
-            = mapping_form.input :enabled, as: :boolean, label: 'Import this field', input_html: { data: { 'mapping-field-target': 'checkbox', action: "click->mapping-field#clickCheckbox" }}
-            .options data-mapping-field-target="options"
-              -if (import_methods = Mapping::OUTPUT_FIELDS.dig(mapping_form.object.output_field.to_sym, :import_methods))&.any?
-                = mapping_form.input :import_method, as: :radio_buttons, collection: import_methods_for_mapping(mapping_form.object), value_method: :first, label_method: :last, label: '', input_html: { data: { 'mapping-field-target': 'importMethod', action: 'click->mapping-field#updateImportMethod' }}
-                -import_methods.each do |method|
-                  = render method.to_s, feed: @feed, mapping_form: mapping_form
-              -else
-                = render 'simple', feed: @feed, mapping_form: mapping_form
-          td
-            .sample_data data-mapping-field-target="sampleData"
-  = form.submit
-  | &nbsp;
-  = link_to "Cancel", suppliers_path
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th Product Field
+          th Source Fields
+          th style="width: 50%" Sample Values
+      tbody
+        = form.fields_for :mappings, wrapper: false do |mapping_form|
+          tr.align-top data-controller="mapping-field" data-mapping-field-sample-data-value=@feed.parsed_data_rows.to_json
+            td
+              = Mapping::OUTPUT_FIELDS.dig(mapping_form.object.output_field.to_sym, :label)
+              = mapping_form.input :output_field, as: :hidden, input_html: { data: { 'mapping-field-target': 'outputField' } }
+            td
+              span.message data-mapping-field-target="message"
+              = mapping_form.input :enabled, as: :boolean, label: 'Import this field', input_html: { data: { 'mapping-field-target': 'checkbox', action: "click->mapping-field#clickCheckbox" }}
+              .options data-mapping-field-target="options"
+                -if (import_methods = Mapping::OUTPUT_FIELDS.dig(mapping_form.object.output_field.to_sym, :import_methods))&.any?
+                  = mapping_form.input :import_method, as: :radio_buttons, collection: import_methods_for_mapping(mapping_form.object), value_method: :first, label_method: :last, label: '', input_html: { data: { 'mapping-field-target': 'importMethod', action: 'click->mapping-field#updateImportMethod' }}
+                  -import_methods.each do |method|
+                    = render method.to_s, feed: @feed, mapping_form: mapping_form
+                -else
+                  = render 'simple', feed: @feed, mapping_form: mapping_form
+            td
+              .sample_data data-mapping-field-target="sampleData"
+    = form.submit
+    | &nbsp;
+    = link_to "Cancel", suppliers_path

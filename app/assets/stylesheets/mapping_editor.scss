@@ -1,0 +1,19 @@
+.mappings.edit {
+  .sample_data {
+    ul.image-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      list-style: outside none;
+    }
+    li {
+      flex: 1 1 auto;
+
+      img {
+        max-width: 120px;
+        border: 1px solid #eaeaea;
+        box-shadow: 5px 5px 10px rgba(100,100,100,0.1);
+      }
+    }
+  }
+}

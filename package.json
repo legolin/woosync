@@ -5,6 +5,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "cable_ready": "^5.0.5",
+    "sanitize-html": "^2.13.1",
     "stimulus-rails-nested-form": "^4.1.0"
   },
   "scripts": {

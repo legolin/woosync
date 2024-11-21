@@ -34,6 +34,7 @@ class Feed < ApplicationRecord
         when 'sku', 'return_policy_code'
           # Noop
         when 'images'
+          product.image_list = value.to_s.split(mapping.array_separator).map(&:strip)
         when 'tags'
           product.tag_list = value
         else

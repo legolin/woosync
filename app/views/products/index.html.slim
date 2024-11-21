@@ -14,7 +14,9 @@ turbo-frame#products-list
 
   .d-flex.justify-content-between.mt-3.mb-2.align-items-center
     span == pagy_info @pagy
-    = link_to "Download as CSV", url_for(request.params.merge(format: :csv)), class: 'btn btn-secondary'
+    = link_to url_for(request.params.merge(format: :csv)), class: 'btn btn-secondary' do
+      i.bi.bi-download
+      span Download as CSV
   table.table
     thead
       tr

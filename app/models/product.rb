@@ -8,6 +8,8 @@ class Product < ApplicationRecord
   validate :supplier, :presence
   validate :sku, :presence
 
+  before_save :set_defaults
+
   after_save :updates_need_sync
 
   scope :not_archived, ->() { where.not(state: 'archived') }
@@ -63,6 +65,19 @@ class Product < ApplicationRecord
     calculator.evaluate(supplier.price_calculation_rule).to_d.truncate(2)
   end
 
+  # Given an array of image URLs, update the list of associated images for this
+  # object.
+  def image_list=array
+    puts array.inspect
+    existing = images.pluck(:url)
+    new_entries = array - existing
+    to_delete = existing - array
+    images.select{ _1.url == to_delete }.each(&:destroy)
+    new_entries.each do |url|
+      self.images.build(url: url)
+    end
+  end
+
   def listing_price
     generated_price || msrp
   end
@@ -72,6 +87,11 @@ class Product < ApplicationRecord
   end
 
   private
+
+  # If no in-stock entry is provided, set the quantity to 0
+  def set_defaults
+    self.quantity_in_stock ||= 0
+  end
 
   def updates_need_sync
     changed_columns = previous_changes.keys - %w[updated_at last_synced_at needs_sync]
