@@ -1,92 +1,65 @@
 require "csv"
 
+def perform(csv_path)
+  file = File.read(csv_path)
+  csv = CSV.parse(file, headers: true)
+
+
+  # @woo = WooCommerce::API.new(
+  #   "https://salomefurnishings.com",
+  #   Rails.application.credentials.dig(:woo_api, :key),
+  #   Rails.application.credentials.dig(:woo_api, :secret),
+  #   {
+  #     wp_api: true,
+  #     version: "wc/v3"
+  #   }
+  # )
+
 # Update attributes for a product
 class ProductUpdater
   include CableReady::Broadcaster
 
-  def perform(csv_path)
-    file = File.read(csv_path)
-    csv = CSV.parse(file, headers: true)
+  # Given a Product instance, sync it to WooCommerce
+  def perform(product)
 
-
-    @woo = WooCommerce::API.new(
-      "https://salomefurnishings.com",
-      Rails.application.credentials.dig(:woo_api, :key),
-      Rails.application.credentials.dig(:woo_api, :secret),
-      {
-        wp_api: true,
-        version: "wc/v3"
-      }
-    )
-
-    # Get all the products until no more products are returned.
-    @all_products = []
-    page_size = 100
-
-    1.upto(100) do |n|
-      log "Fetching products #{(n - 1) * page_size} to #{n * page_size}..."
-
-      batch = @woo.get("products", page: n, per_page: page_size, context: "edit").parsed_response
-
-      @all_products += batch
-
-      break if batch.length < page_size
+    # Get the copy of this product from Woo
+    remote_product = begin
+      Model::Product.get_product_by_sku(product.sku)
+    rescue Model::Product::NotFoundError
+      nil
     end
 
-    @category_ids_by_slug =
-      @woo.get("products/categories", "page" => 1, "per_page" => 100)
-      .parsed_response
-      .each_with_object({}) do |cat, hash|
-        hash[cat["slug"]] = cat["id"]
-      end
+    # attributes = if product.nil?
+    #   []
+    # else
+    #   product["attributes"].dup
+    # end
 
-    @tag_ids =
-      @woo.get("products/tags", page: 1, per_page: 100)
-      .parsed_response
-      .each_with_object({}) do |tag, hash|
-        hash[tag["slug"]] = tag["id"]
-      end
+    # update_attributes(attributes, name: "Returns", val: product.return_policy_code)
 
-    @updates = []
-    @to_create = []
-
-    # For each row, find the product and update it
-    csv.each do |row|
-      sku = row["SKU"]
-
-      # Get the product
-      product = lookup_product_by_sku(sku)
-
-      attributes = if product.nil?
-        []
-      else
-        product["attributes"].dup
-      end
-
-      update_attributes(attributes, name: "Returns", val: row["ReturnPolicyCode"])
 
       data = {
         "status" => status_for_row(row),
-        "regular_price" => row["MSRP"],
+        "regular_price" => product.msrp,
         "manage_stock" => true,
-        "stock_quantity" => row["Quantity In Stock"].to_i,
-        "attributes" => attributes,
-        "categories" => category_ids(row),
+        "stock_quantity" => product.quantity_in_stock,
+        # "attributes" => attributes,
+        "categories" => category_ids(product),
         "dimensions" => {
-          "length" => row["Product Depth"],
-          "width" => row["Product Width"],
-          "height" => row["Product Height"]
+          "length" => product.length,
+          "width" => product.width,
+          "height" => product.height
         },
-        "tags" => tag_ids(row),
-        "name" => row["Title"],
-        "description" => row["Description"]
+        "tags" => tag_ids(product),
+        "name" => product.title,
+        "description" => product.description
       }
 
       if product.nil?
-        @to_create << data.merge(
+        data.merge!(
           "type" => "simple",
-          "sku" => sku,
-          "images" => row["Images"].split(",").map { |url| { "src" => url } },
+          "sku" => product.sku,
+          "images" => product.images.map { |image| { "src" => image.url } },
         )
       else
         # Compare the new data with the existing data
@@ -97,17 +70,11 @@ class ProductUpdater
         changed_category_ids = (data["categories"].map { _1["id"] } & product["categories"].map { _1["id"] }).length != data["categories"].length
         if diff.length > 0 || changed_category_ids
           log "Updating item #{sku}: #{diff.inspect}"
-          @updates << data.merge(id: product["id"])
+          data.merge!(id: product["id"])
         end
       end
 
-      # Save updates in batdches of 50
-      if (@updates.length + @to_create.length) >= 50 || (@to_create.length > 10)
-        log "Saving batch... #{@to_create.length} new, #{@updates.length} existing"
-        save_batch(updates: @updates, to_create: @to_create)
-        @updates = []
-        @to_create = []
-      end
+
     end
 
     # Save the remaining updates
@@ -150,7 +117,6 @@ class ProductUpdater
   def status_for_row(row)
     return "draft" unless
       row["Quantity In Stock"].to_i > 0 && row["Title"].to_s.split(/\s+/).count >= 2
-
 
     "publish"
   end
