@@ -2,6 +2,7 @@ module Connectors
   module Woo
     # This base class provides functionality for calling WooCommerce API endpoints.
     class Connection
+      ApiError = Struct.new(:code, :message)
       def initialize(url, key:, secret:)
         @woo = WooCommerce::API.new(
           url,
@@ -29,7 +30,7 @@ module Connectors
         when 200..299
           [res.parsed_response, nil]
         else
-          [nil, res.parsed_response]
+          [nil, ApiError.new(res.code, res.parsed_response['message'])]
         end
       end
     end

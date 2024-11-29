@@ -4,21 +4,27 @@ module Connectors
       class Base
         include ActiveModel::API
         include ActiveModel::Attributes
+        include ActiveModel::Dirty
+        include ActiveModel::Serialization
 
-        class UpdateError < StandardError; end
-        class GetError < StandardError; end
-        class NotFoundError < StandardError; end
-
-        def self.connection= connection
-          @@connection = connection
+        # By default, send all defined attributes when POSTing
+        def attributes_for_post
+          attributes.slice(*self.attribute_names).compact
         end
 
-        def self.connection
-          @@connection
+        def apply_api_response(res)
+          self.attributes = res.slice(*self.attribute_names)
+          changes_applied
         end
 
-        def connection
-          @@connection
+        def self.from_api_response(res)
+          new.tap do |obj|
+            obj.apply_api_response(res)
+          end
+        end
+
+        def to_h(**options)
+          serializable_hash(**options)
         end
       end
     end

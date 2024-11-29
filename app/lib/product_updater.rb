@@ -26,8 +26,9 @@ class ProductUpdater
     remote_product = begin
       Model::Product.get_product_by_sku(product.sku)
     rescue Model::Product::NotFoundError
-      nil
+      Model::Product.new_from_product(product)
     end
+
 
     # attributes = if product.nil?
     #   []
@@ -73,8 +74,6 @@ class ProductUpdater
           data.merge!(id: product["id"])
         end
       end
-
-
     end
 
     # Save the remaining updates
