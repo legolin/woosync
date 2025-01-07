@@ -1,6 +1,24 @@
-h2 Edit Product
+.products.edit
+  h2 Edit Product
 
-= simple_form_for(@product) do |f|
-  = f.input :custom_title
-  = f.input :custom_description
-  = f.submit
+  = simple_form_for(@product) do |f|
+    h3 Basic Information
+
+    = f.input :sku
+    = f.input :custom_title
+    = f.input :custom_description
+
+    h3 Pricing Details
+
+    = f.input :price, label: 'Wholesale price'
+    = f.input :msrp, label: 'MSRP / Listing Price'
+    = f.input :shipping_cost
+
+    h3 Dimensions & Weight
+
+    = f.input :width
+    = f.input :height
+    = f.input :length
+    = f.input :weight
+
+    = f.submit

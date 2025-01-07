@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_04_194847) do
+  create_table "attribute_terms", force: :cascade do |t|
+    t.integer "attribute_id"
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.string "display_name", default: ""
+    t.index ["attribute_id"], name: "index_attribute_terms_on_attribute_id"
+  end
+
+  create_table "attributes", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "name", null: false
+  end
+
   create_table "feeds", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -28,7 +41,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
   create_table "images", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "url"
+    t.integer "variation_id"
     t.index ["product_id"], name: "index_images_on_product_id"
+    t.index ["variation_id"], name: "index_images_on_variation_id"
   end
 
   create_table "imports", force: :cascade do |t|
@@ -77,6 +92,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
     t.index ["feed_id"], name: "index_mappings_on_feed_id"
   end
 
+  create_table "product_attributes", force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "attribute_id"
+    t.json "term_slugs"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attribute_id"], name: "index_product_attributes_on_attribute_id"
+    t.index ["product_id"], name: "index_product_attributes_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.integer "supplier_id", null: false
     t.string "sku", null: false
@@ -104,6 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
     t.datetime "last_synced_at"
     t.decimal "custom_price", precision: 10, scale: 2
     t.decimal "msrp", precision: 10, scale: 2
+    t.text "categories"
     t.index ["return_policy_code_id"], name: "index_products_on_return_policy_code_id"
     t.index ["sku"], name: "index_products_on_sku", unique: true
     t.index ["supplier_id"], name: "index_products_on_supplier_id"
@@ -122,6 +148,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
     t.json "default_values", default: {}, null: false
     t.json "status_rules", default: {}, null: false
     t.text "price_calculation_rule"
+    t.string "sku_prefix", default: ""
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -153,6 +180,23 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_020925) do
     t.datetime "updated_at", null: false
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "variation_attributes", force: :cascade do |t|
+    t.integer "variation_id"
+    t.integer "attribute_id"
+    t.integer "attribute_term_id"
+    t.index ["attribute_id"], name: "index_variation_attributes_on_attribute_id"
+    t.index ["attribute_term_id"], name: "index_variation_attributes_on_attribute_term_id"
+    t.index ["variation_id"], name: "index_variation_attributes_on_variation_id"
+  end
+
+  create_table "variations", force: :cascade do |t|
+    t.integer "product_id"
+    t.string "regular_price", default: "0.00"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_variations_on_product_id"
   end
 
   add_foreign_key "images", "products"

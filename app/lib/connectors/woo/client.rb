@@ -73,15 +73,16 @@ module Connectors
       end
 
       def save_object(path, object, options = {})
-        if id = object.id.present?
+        if (id = object.id).present?
           res, err = connection.post("#{path}/#{id}", object.attributes_for_post)
-          raise UpdateError, "Unable to update category with ID #{id}, Error: #{err.message}" if err
+          raise UpdateError, "Unable to update #{object.class.name} with ID #{id}, Error: #{err.message}" if err
         else
           res, err = connection.post(path, object.attributes_for_post)
-          raise CreateError, "Unable to create category, Error: #{err.message}" if err
+          raise CreateError, "Unable to create #{object.class.name}, Error: #{err.message}" if err
         end
 
         object.apply_api_response(res)
+        object
       end
 
       private

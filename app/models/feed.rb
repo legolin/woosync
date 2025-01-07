@@ -19,6 +19,7 @@ class Feed < ApplicationRecord
     csv.each do |row|
       sku = row['sku'] || row['SKU']
       product = Product.where(sku: sku).first_or_initialize
+      product.supplier_id = supplier_id if supplier_id
       mappings.each do |mapping|
         # Skip this mapping if no output field is defined
         next if mapping.output_field.blank?

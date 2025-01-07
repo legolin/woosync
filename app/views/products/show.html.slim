@@ -1,9 +1,9 @@
 .products.show
-  h2 = @product.title
+  h2 = @product.listing_title
 
   h6 = "[SKU #{ @product.sku }]"
 
-  = (@product.description || 'No Description').html_safe
+  = (@product.listing_description || 'No Description').html_safe
 
   h5 Price
 
@@ -52,7 +52,8 @@
       li
         img src=img.url
 
-  .buttons
+  .buttons.justify-content-between
+    = button_to 'Edit', edit_product_path(@product), method: :get, class: 'btn btn-primary'
     - if @product.state == 'active'
       = button_to 'Discontinue', product_path(@product), method: :patch, params: { product: { state_event: 'discontinue' }}, class: 'btn btn-danger'
     - elsif @product.state == 'discontinued'

@@ -5,6 +5,8 @@ class Product < ApplicationRecord
   belongs_to :supplier
   has_many :images
 
+  attr_accessor :listing_title, :listing_description
+
   validate :supplier, :presence
   validate :sku, :presence
 
@@ -39,12 +41,14 @@ class Product < ApplicationRecord
     )
   end
 
+  def available?
+    self.quantity_in_stock > 0 && listing_title.length > 0 && state == 'active'
+  end
+
   def availability
-    if self.quantity_in_stock > 0
-      "In Stock"
-    else
-      "Out of Stock"
-    end
+    return 'In Stock' if available?
+
+    'Out of Stock'
   end
 
   def estimated_profit_margin
@@ -78,8 +82,33 @@ class Product < ApplicationRecord
     end
   end
 
+  # If a generated price exists, use that.  Otherwise fall back to MSRP.
   def listing_price
     generated_price || msrp
+  end
+
+  # If a custom title exists, use that.  Otherwise fall back to the original title.
+  def listing_title
+    return custom_title if custom_title.present?
+
+    title
+  end
+
+  # Write listing_title to custom_title
+  def listing_title=val
+    self.custom_title = val
+  end
+
+  # Write listing_description to custom_description
+  def listing_description=val
+    self.custom_description = val
+  end
+
+  # If a custom description exists, use that.  Otherwise fall back to the original description.
+  def listing_description
+    return custom_description if custom_description.present?
+
+    description
   end
 
   def destroy

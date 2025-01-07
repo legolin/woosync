@@ -26,12 +26,13 @@ module Connectors
           filtered_raw_hash = if full
             full_raw_hash
           else
-            full_raw_hash.slice(changes.keys)
+            full_raw_hash.slice(*changes.keys)
           end
 
           filtered_raw_hash.tap do |hash|
-            hash['categories'] = hash['categories'].map { |category| { id: category.id } }
-            hash['tags'] = (hash['tags'] || []).map { |tag| { id: tag.id } }
+            hash['categories'] = (hash['categories'] || []).map { |category| category.slice('id') } if hash.key?('categories')
+            hash['tags'] = (hash['tags'] || []).map { |tag| { id: tag.id } } if hash.key?('tags')
+            hash['images'] = (hash['images'] || []).map { |image| image.slice('id', 'src') } if hash.key?('images')
           end
         end
 
@@ -39,6 +40,7 @@ module Connectors
         #
         def apply_api_response(res)
           self.attributes = res.transform_keys('attributes' => 'product_attributes').slice(*self.attribute_names)
+          changes_applied
         end
       end
     end

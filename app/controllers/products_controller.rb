@@ -40,7 +40,8 @@ class ProductsController < ApplicationController
   end
 
   def update
-    @product.update(product_params)
+    UpdateProductsJob.perform_later(@product.id) if @product.update(product_params)
+
     respond_to do |format|
       format.html { redirect_to product_path(@product) }
       format.turbo_stream { render :update }

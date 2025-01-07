@@ -11,6 +11,6 @@ tr id=dom_id(product)
       - else
         div.status_circle.green &nbsp;
   td = product.supplier.name
-  td = product.title
+  td = product.listing_title
   td style="text-align: right;" = product.listing_price ? "%.2f" % product.listing_price : 'N/A'
   td style="text-align: right;" = product.quantity_in_stock
